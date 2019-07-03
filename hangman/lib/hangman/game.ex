@@ -19,10 +19,12 @@ defmodule Hangman.Game do
 
   def make_move(game = %Hangman.Game{ game_state: state }, _guess) when state in [:won, :lost] do
     game
+    |> return_with_tally()
   end
 
   def make_move(game, guess) do
     valid_guess(game, guess, guess =~ ~r(^[a-z]*$))
+    |> return_with_tally()
   end
 
   def tally(game) do
@@ -66,7 +68,7 @@ defmodule Hangman.Game do
     }
   end
 
-  defp score_guess(game = %{ turns_left: turns_left}, _not_good_guess) do
+  defp score_guess(game = %{ turns_left: turns_left }, _not_good_guess) do
     %{ game |
       game_state: :bad_guess,
       turns_left: turns_left - 1,
@@ -83,5 +85,7 @@ defmodule Hangman.Game do
 
   defp reveal_letter(letter, _in_word = true), do: letter
   defp reveal_letter(letter, _not_in_word),    do: "_"
+
+  defp return_with_tally(game), do: { game, tally(game) }
 
 end

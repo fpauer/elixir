@@ -17,32 +17,32 @@ defmodule Hangman.GameTest do
   end
 
   test "letter is a not valid guess" do
-    game = Game.new_game() |> Game.make_move("$")
+    { game, _tally } = Game.new_game() |> Game.make_move("$")
     assert game.game_state == :invalid_guess
   end
 
   test "state isn't changed for :won or :lost game" do
     for state <- [ :won, :lost ] do
       game = Game.new_game() |> Map.put(:game_state, state)
-      assert ^game = Game.make_move(game, "x")
+      assert { ^game, _tally } = Game.make_move(game, "x")
     end
   end
 
   test "first occurrence of letter is not already used" do
-    game = Game.new_game() |> Game.make_move("x")
+    {game, _} = Game.new_game() |> Game.make_move("x")
     assert game.game_state != :already_used
   end
 
   test "first occurrence of letter is already used" do
-    game = Game.new_game() |> Game.make_move("x")
+    { game, _tally } = Game.new_game() |> Game.make_move("x")
     assert game.game_state != :already_used
-    game = Game.make_move(game, "x")
+    { game, _tally } = Game.make_move(game, "x")
     assert game.game_state == :already_used
   end
 
   test "a good guess is recognized" do
     game = Game.new_game("wibble")
-    game = Game.make_move(game, "w")
+    { game, _tally} = Game.make_move(game, "w")
     assert game.game_state == :good_guess
     assert game.turns_left == 7
   end
@@ -58,7 +58,7 @@ defmodule Hangman.GameTest do
 
     Enum.reduce(moves, game,
       fn ({ guess, state }, new_game) ->
-        new_game = Game.make_move(new_game, guess)
+        { new_game, _tally} = Game.make_move(new_game, guess)
         assert new_game.game_state == state
         new_game
       end
@@ -68,7 +68,7 @@ defmodule Hangman.GameTest do
   end
 
   test "bad guess is recognized" do
-    game = Game.new_game("abc")
+    { game, _tally} = Game.new_game("abc")
     |> Game.make_move("x")
     assert game.game_state == :bad_guess
     assert game.turns_left == 6
@@ -88,7 +88,7 @@ defmodule Hangman.GameTest do
     ]
     |> Enum.with_index()
     |> Enum.reduce( game, fn ({{ guess, state }, index}, new_game) ->
-        new_game = Game.make_move(new_game, guess)
+        { new_game, _tally} = Game.make_move(new_game, guess)
         assert new_game.game_state == state
         assert new_game.turns_left == 6 - index
         new_game
