@@ -3,7 +3,11 @@ defmodule Cache.Engine do
   @me __MODULE__
 
   def start_link do
-    Agent.start_link(fn -> %{ 0 => 0, 1 => 1 } end, name: @me)
+    Agent.start_link(fn -> %{} end, name: @me)
+  end
+
+  def reset(initial = %{}) do
+    Agent.update(@me, fn state -> initial end)
   end
 
   def run(body) do

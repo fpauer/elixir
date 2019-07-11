@@ -1,8 +1,7 @@
 defmodule Fibonacci do
 
-  alias Fibonacci.Cache
-
   def fib(n) do
+    Cache.reset(%{ 0 => 0, 1 => 1 })
     Cache.run(fn cache ->
       cached_fib(n, cache)
     end)

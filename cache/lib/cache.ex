@@ -18,6 +18,7 @@ defmodule Cache do
   alias Cache.Engine
 
   defdelegate run(body), to: Engine
+  defdelegate reset(initial), to: Engine
   defdelegate lookup(cache, n, if_not_found), to: Engine
 
 end
