@@ -53,8 +53,8 @@ defmodule TextClient.Player do
   end
 
   def make_move(state) do
-    { game_service, tally } = Hangman.make_move(state.game_service, state.guess)
-    %State{ state | game_service: game_service, tally: tally }
+    { game, tally } = Hangman.make_move(state.pid, state.guess)
+    %State{ state | tally: tally, game_service: game }
   end
 
   defp exit_with_message(msg) do
