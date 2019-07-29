@@ -1,0 +1,11 @@
+<h1><%= gettext "Welcome to %{name}!", name: "Hangman" %></h1>
+<%= inspect @tally %>
+<p>Turns left: <%= @tally.turns_left %></p>
+<p>Word so far: <%= displayWordSoFar(@tally) %></p>
+<%= form_for @conn, Routes.hangman_path(@conn, :make_move), [as: :make_move, method: :put], fn f -> %>
+  <label>
+    Guess: <%= text_input(f, :guess) %>
+  </label>
+
+  <%= submit("Guess") %>
+<% end %>
