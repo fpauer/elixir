@@ -1,0 +1,2 @@
+<h1><%= gettext "Welcome to %{name}!", name: "Hangman" %></h1>
+<button >New Game </button>
